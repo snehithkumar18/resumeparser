@@ -1,0 +1,14 @@
+Job Title: Machine Learning Engineer
+Experience Required: 3+ years of experience in data science or ML engineering
+Key Responsibilities:
+- Design, build, and deploy machine learning and deep learning models.
+- Develop natural language processing pipelines and predictive analytics applications.
+- Work with PyTorch, TensorFlow, and Python to train neural networks.
+- Query datasets using SQL and construct data pipelines.
+Required Skills:
+- Python
+- PyTorch or TensorFlow
+- SQL
+- Data Science (Scikit-Learn, Pandas)
+Project Requirements:
+- Must have built and deployed Machine Learning projects, such as fraud detection, NLP chatbot, or recommendation systems.

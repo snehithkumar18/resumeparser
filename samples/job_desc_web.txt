@@ -1,0 +1,14 @@
+Job Title: Fullstack Web Developer (Python/React)
+Experience Required: 2+ years of software development experience
+Key Responsibilities:
+- Build responsive web interfaces and SaaS dashboards.
+- Develop backend API services in Python (Django or Flask).
+- Design database schemas in MySQL or PostgreSQL.
+Required Skills:
+- Python
+- React
+- JavaScript
+- Django
+- SQL (MySQL or PostgreSQL)
+Project Requirements:
+- Completed fullstack web applications, SaaS dashboards, or database-driven projects.

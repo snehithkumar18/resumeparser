@@ -64,36 +64,87 @@ The matching and validation pipeline ensures high accuracy and prevents AI hallu
 
 ---
 
-## 🚀 4. How to Set Up and Test the Project
+## 🚀 4. How to Use the Project
 
-### Prerequisites
-Make sure your terminal is opened in `c:\Users\NEHITH\Ai_engineer\resume_parser`.
+Follow these steps to configure, run, and test the project locally.
 
-### 1. Re-generate Samples
-Run the sample generator script to create test resumes (DOCX and PDF) and Job Description templates inside the `samples/` folder:
+### Step 1: Environment & API Key Setup
+
+1. Make sure you have a `.env` file in the parent directory (`c:/Users/NEHITH/Ai_engineer/.env`) or directly inside this `resume_parser` directory.
+2. The `.env` file must contain your Groq API Key:
+   ```env
+   GROQ_API_KEY=your_groq_api_key_here
+   ```
+
+### Step 2: Install Dependencies
+If you are running the project in a new environment, make sure to install the dependencies inside the virtual environment:
 ```bash
+# Using uv (fastest)
+uv pip install -r pyproject.toml
+
+# Or using standard pip
+pip install groq pydantic python-dotenv pypdf python-docx streamlit rich reportlab
+```
+
+### Step 3: Generate Mock Resumes & JDs for Testing
+We provide a helper utility to instantly generate sample PDF and Word resumes, as well as Job Descriptions, so you can test the system right away:
+```bash
+# From the resume_parser directory:
 ..\.venv\Scripts\python generate_samples.py
 ```
+This generates the following files in the `samples/` subdirectory:
+*   `samples/resume_john_doe.docx`: Fullstack Web Developer profile.
+*   `samples/resume_sarah_smith.pdf`: Data Scientist / ML Engineer profile.
+*   `samples/job_desc_web.txt`: Web Developer job description.
+*   `samples/job_desc_ml.txt`: Machine Learning Engineer job description.
 
-### 2. Run the CLI
-Use the command-line interface to match resumes against JDs directly in your terminal. We pass `$env:PYTHONUTF8="1"` to support spinner/checkmark symbols on Windows:
+---
 
-*   **Positive Match (John Doe vs Web JD):**
-    ```powershell
-    $env:PYTHONUTF8="1"; ..\.venv\Scripts\python main.py --resume samples/resume_john_doe.docx --jd samples/job_desc_web.txt
-    ```
-*   **Positive Match (Sarah Smith vs ML JD):**
-    ```powershell
-    $env:PYTHONUTF8="1"; ..\.venv\Scripts\python main.py --resume samples/resume_sarah_smith.pdf --jd samples/job_desc_ml.txt
-    ```
-*   **Negative Match (John Doe vs ML JD):**
-    ```powershell
-    $env:PYTHONUTF8="1"; ..\.venv\Scripts\python main.py --resume samples/resume_john_doe.docx --jd samples/job_desc_ml.txt
-    ```
+### Step 4: Using the CLI Interface
+The CLI tool (`main.py`) supports two ways of providing job requirements:
 
-### 3. Run the Streamlit Dashboard
-Launch the web interface locally to upload resumes, enter criteria manually, or paste job descriptions:
-```bash
-..\.venv\Scripts\streamlit run app.py
+#### Option A: Match using a Job Description file (`--jd`)
+Pass the path to the resume and the job description text file:
+```powershell
+# Set UTF-8 encoding for Windows terminals to display modern UI graphics:
+$env:PYTHONUTF8="1"
+
+# Run match
+..\.venv\Scripts\python main.py --resume samples/resume_john_doe.docx --jd samples/job_desc_web.txt
 ```
-Open **[http://localhost:8501](http://localhost:8501)** in your web browser. Drag and drop any resume from the `samples/` folder to view the interactive dashboard.
+
+#### Option B: Match using Manual Criteria
+If you don't have a job description file, you can pass criteria using CLI flags:
+*   `--resume`: Path to the resume file (Required)
+*   `--skills`: Comma-separated list of required skills (Required)
+*   `--exp`: Minimum required years of experience (Default: 0.0)
+*   `--projects`: Description of the project preferences (Default: "")
+
+Example:
+```powershell
+$env:PYTHONUTF8="1"
+..\.venv\Scripts\python main.py --resume samples/resume_sarah_smith.pdf --skills "Python, PyTorch, SQL" --exp 4.0 --projects "deep learning chatbot"
+```
+
+---
+
+### Step 5: Using the Streamlit Web Dashboard
+The Streamlit dashboard (`app.py`) provides an interactive, visual interface for HR professionals.
+
+#### 1. Launch the Server
+Start the Streamlit application from your terminal:
+```bash
+..\.venv\Scripts\streamlit run app.py --server.port 8501 --server.address localhost
+```
+Open **[http://localhost:8501](http://localhost:8501)** in your web browser.
+
+#### 2. Using the Dashboard
+*   **Sidebar Settings**: 
+    *   **LLM Model**: Switch between `llama-3.3-70b-versatile` (high accuracy) and `llama-3.1-8b-instant` (high speed).
+    *   **HR Match Threshold**: Set the score percentage (e.g. 70%) required to trigger the green "Call Candidate" recommendation.
+*   **Input Job Requirements**: 
+    *   Choose *Paste Job Description Text* to copy-paste an entire JD (the app will extract requirements automatically).
+    *   Choose *Enter Criteria Manually* to enter exact years, skills, and project guidelines.
+*   **Upload and Analyze**:
+    *   Drag and drop a candidate's resume (PDF, Word, or TXT).
+    *   Click **Run Matching & Evaluation** to run the matching engine and view the results.
